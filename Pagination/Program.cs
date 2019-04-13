@@ -7,14 +7,11 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Pagination.Classes;
 
-namespace Pagination
+namespace PaginationApp.Pagination
 {
     public class Program
     {
-        public static ServiceList serviceList = new ServiceList();
-
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();

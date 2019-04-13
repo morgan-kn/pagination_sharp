@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Pagination.Classes;
+using Pagination.Controls;
+using Pagination.Models;
 
 namespace Pagination.Controllers
 {
@@ -15,64 +14,49 @@ namespace Pagination.Controllers
     {
         // GET: api/<controller>
         [HttpGet]
-        public List<string> Get()
+        public List<ServiceModel> GetList()
         {
-            return Program.serviceList.GetStringList();
+            return ServiceControl.GetList();
         }
 
-        // GET: api/<controller>/serviceName
-        [HttpGet("{serviceName}")]
-        public ServiceInfo? Get(string serviceName)
+        // GET: api/<controller>/id
+        [HttpGet("{id}")]
+        public ServiceModel GetService(Guid id)
         {
-            var serviceInfo = Program.serviceList.GetServiceInfo(serviceName);
-            if (serviceInfo != null) return (ServiceInfo)serviceInfo;
-            return null;
+            return ServiceControl.GetService(id);
         }
 
-        // GET: api/<controller>/serviceName/currentPage
-        [HttpGet("{serviceName}/{currentPage}")]
-        public List<int> Get(string serviceName, int currentPage)
+        // GET: api/<controller>/id/currentPage
+        [HttpGet("{id}/{page}")]
+        public List<int> GetPagination(Guid id, int page)
         {
-            var pagination = Classes.Pagination.Get(serviceName, currentPage);
-            return pagination;
+            if (page < 0 || !(page is int)) return null;
+
+            return ServiceControl.GetPagination(id, page);
         }
 
         // POST: api/<controller>/add
         [HttpPost("add")]
-        public StatusCodeResult Post([FromBody]ServiceInfo serviceInfo)
+        public StatusCodeResult Add([FromBody]ServiceModel service)
         {
             try
             {
-                Program.serviceList.Add(serviceInfo.name, serviceInfo.firstPage, serviceInfo.lastPage);
+                ServiceControl.Add(service);
                 return Ok();
             }
-            catch
-            {
-                return NoContent();
-            }
+            catch { return NoContent(); }
         }
 
-        // POST: api/<controller>/remove
-        [HttpPost("remove")]
-        public StatusCodeResult Post([FromBody]string serviceName)
+        // POST: api/<controller>/delete
+        [HttpPost("delete")]
+        public StatusCodeResult Delete([FromBody]Guid id)
         {
             try
             {
-                Program.serviceList.Remove(serviceName);
+                ServiceControl.Delete(id);
                 return Ok();
             }
-            catch
-            {
-                return NoContent();
-            }
-        }
-
-        // POST: api/<controller>/generate
-        [HttpPost("generate")]
-        public StatusCodeResult Post()
-        {
-            Program.serviceList.Generate();
-            return Ok();
+            catch { return NoContent(); }
         }
     }
 }
