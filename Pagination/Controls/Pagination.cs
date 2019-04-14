@@ -5,13 +5,8 @@ using System.Threading.Tasks;
 
 namespace Pagination.Controls
 {
-    public class PaginationControl
+    public class Pagination
     {
-        public static string A()
-        {
-            return "123";
-        }
-
         public static List<int> Get(int firstPage, int currentPage, int lastPage)
         {
             if(firstPage < 0 || currentPage > lastPage) return null;

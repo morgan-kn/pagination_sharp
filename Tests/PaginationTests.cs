@@ -25,8 +25,8 @@ namespace Tests.PaginationUnitTests
         [MemberData(nameof(Data))]
         public void Test(int first, int current, int last, List<int> expected = null)
         {
-            var pagination = PaginationControl.Get(first, current, last);
-            Assert.Equal(pagination, expected);
+            var actual = Pagination.Controls.Pagination.Get(first, current, last);
+            Assert.Equal(expected, actual);
         }
     };
 
